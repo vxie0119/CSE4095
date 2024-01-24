@@ -40,7 +40,7 @@ def calculator():
 
             if choice == '1':
                 result = add(num1, num2)
-                print(f"The answer of {num1} + {num2} is {result}")
+                print(f"The answer of {(num1)} + {num2} is {result}")
 
             elif choice == '2':
                 result = subtract(num1, num2)
