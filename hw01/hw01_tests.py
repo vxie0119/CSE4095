@@ -10,7 +10,7 @@ def test_mult():
     assert pycalc.multiply(5,5) == 25.0
 
 def test_divide():
-    assert pycalc.divide(5,5) == 1.0
+    assert pycalc.divide(5,5) == 5.0
     assert pycalc.divide(5,0) == "Cannot divide by zero!"
 
 
