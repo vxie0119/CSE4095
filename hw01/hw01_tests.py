@@ -1,5 +1,4 @@
 import pycalc
-import pytest
 
 def test_add():
     assert pycalc.add(5,5) == 10.0
