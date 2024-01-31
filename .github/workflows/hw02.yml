@@ -24,12 +24,38 @@ jobs:
         env:
           # You must create GitHub secrets for each of these env variables
           # SSH_PRIVATE_KEY is literally the RSA private key value. "Show key" in the "AWS Details" tab of the LL launch screen
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          SSH_PRIVATE_KEY: ${{ -----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEAqY+WQ+TUHqwWUb1dw+SoN7646RDXan7ICOOwwLwWiMIED4Tb
+6aGffNb8CqpRnjZoRDov6cy4G98vKzn5akkC9fqxqi50B2K/xvSt8mr0s8mkNrff
+tP6lgfyztTI05kzYWdHTTZ3huNGUpO2Ff2fjSMyEjGd7GnqrImA2VAXnA9YobJUQ
+E2oIbLPyZEnCPD60BN+Q+hIf7PhIJSBOJt6bl5IYESQpgOyxyx8HNWc6QtaOzcM3
+MQFbkX67Z2vDWGEZhjqRCCyIIKhmcByecFT6siyynfiIQi67eeKXy5ePxQEtrPwN
+uC+1DmKZlRPq9UlzAL80HLNn7vsP0MVIz8DjMQIDAQABAoIBAQCf5cIEYIQQMKQT
+jQohMz3W48ooLzOVP92PVHhYKIbvjFab8+QWG830wh+IRzkUg6YrwNtyFRYBYqRu
+lQs5SYS7Rh/IpmnQlTTYf+CRXH9KE/sBhsA1RHX7cLxfQOtVyl2zxgUHir1TtoAA
+T+S2UteozQSqCuOyAr/jeOuCrNY/bGpYYWjEnc55Lo6m50K2z9irJ4QF6rw2eJAl
+U4xVFsjoVShLYeMnzdnRYGjHIqZyb7t+EPQC5NXKc+Ux8Un13/Iim5//QS/vzlGv
+nmEuNmBCKJqV25yDY/2Je8sauMbjzjnjTEvRFLec3+YKUDmOjykTXI2jNjtrjuOt
+jlDVtZQJAoGBANIQaO4TeaI3+yXo6S4PGjTovxXfmtKubyNtPryiafrBUq+kMdks
+8yGWjQUAcWEKBSRuIUEASU6tZUGtmKKwT/RrGYLrDre0WP3yUFnIc2GQBCpLoGHJ
+fwkBSOsHd6RE3LLmRssv1T5TqMx4xAjMbCGBdpRbmQH/J6SFsKo56c4jAoGBAM6j
+xKvDUZ8zCS0GEZzCQNtJn+zRrvCmxtGzFe2Shr8cuU3DhN9+fsFPl/CQDy8vmLut
+vt21zmhOLQMIwfRDYrS9n2qbVaN71ZYdUOzHh6rxZF5XkjCqX/JONg8xP7evzphg
+9w8ps1Q3v+DVzSd7M4/NjJHN3KBNWTnAAAGG+dybAoGAVqyAryMH///7N4QnmmKO
+3J/gIEVX23Av2T09MpYNBnL4DBLCoqpiU0yMOTEalwCMaKCsRea5WKZA7l2TaiU3
+iFEcgKE+PFxEj9uIfdMwkGPc5Bq6PT7nlK6cCKXXHsdvDL3pHfNJmGLqdhuqPzsh
+rp19cO9ubZ17HO4wm7wzlWMCgYEApFXp2xACobFc4smoyBpUqhDrdtNrZUe9Zpge
+IEofj22wkP+ldHiNJf++vjpTWRtpRBjxajFkbd9+PKOCXFga79K+LXJLsTCStEes
+TCKC6pf/Umgig0F7/J/mrj5khhjzHIxA73YigB+2IYDnHzcD0qGN4Ybupy3cf+kK
+GCzYGXECgYBmpQyhuDakHc59tasEoCaYGOqHBEPDvSZ0fZu9uNcx0Mju4xL/qv0K
+Q5DczNn4ebXV/ObsprZeTXSUa8Zhs3zm+WKqYxC24yLCq3eQL/nWMngEt4dOvaPA
+Lrn+kLsISJTwWfduAN/U173LsemlRtw3ESzN7j+KSoNCCEwcZPd3yw==
+-----END RSA PRIVATE KEY-----}}
           # The public dns of your EC2 instance. You must update this value every LL session! (Yes, this is annoying.)
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_HOST: ${{ ec2-54-161-75-216.compute-1.amazonaws.com }}
           # Usually set to "ec2-user"
-          REMOTE_USER: ${{ secrets.USERNAME }}
+          REMOTE_USER: ${{ ec2-user }}
           # Limit the deploy to ONLY these files
           SOURCE: "HW02/*.html" 
           # Local EC2 path to deploy the code. e.g. "~/server"
-          TARGET: ${{ secrets.TARGET_DIR }}
+          TARGET: ${{ "/var/html/www }}
