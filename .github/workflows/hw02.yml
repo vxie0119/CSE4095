@@ -58,4 +58,4 @@ Lrn+kLsISJTwWfduAN/U173LsemlRtw3ESzN7j+KSoNCCEwcZPd3yw==
           # Limit the deploy to ONLY these files
           SOURCE: "HW02/*.html" 
           # Local EC2 path to deploy the code. e.g. "~/server"
-          TARGET: ${{ "/var/html/www }}
+          TARGET: ${{ "/var/www/html }}
