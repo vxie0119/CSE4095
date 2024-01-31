@@ -32,4 +32,4 @@ jobs:
           # Limit the deploy to ONLY these files
           SOURCE: "HW02/*.html" 
           # Local EC2 path to deploy the code. e.g. "~/server"
-          TARGET: ${{ secrets.TARGET_DIR }}```
+          TARGET: ${{ secrets.TARGET_DIR }}
