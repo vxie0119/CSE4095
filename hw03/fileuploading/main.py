@@ -25,7 +25,7 @@ def get_files():
             file_stat = os.stat(filename)
             info = {
                 'filename': filename,
-                'size': file_stat.st_size,
+                'size': {file_stat.st_size / (1024 * 1024)},
                 'modified_date': file_stat.st_mtime
             }
             files.append(info)
