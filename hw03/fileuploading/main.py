@@ -20,8 +20,9 @@ def success():
 @app.route('/file_list', methods = ["GET"])
 def get_files():
     files = []
+    non_image = False
     for filename in os.listdir('.'):
-        if os.path.isfile(filename):
+        if os.path.isfile(filename) and filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
             file_stat = os.stat(filename)
             info = {
                 'filename': filename,
@@ -29,6 +30,8 @@ def get_files():
                 'modified_date': datetime.fromtimestamp(file_stat.st_mtime).strftime('%Y-%m-%d %H:%M:%S')
             }
             files.append(info)
+        else: 
+            non_image = True 
     return render_template("file_list.html", files=files)
 
 
