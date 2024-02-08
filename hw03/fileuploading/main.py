@@ -25,8 +25,8 @@ def get_files():
             file_stat = os.stat(filename)
             info = {
                 'filename': filename,
-                'size': {file_stat.st_size / (1024 * 1024)},
-                'modified_date': file_stat.st_mtime
+                'size': round(file_stat.st_size / (1024 * 1024), 2),
+                'modified_date': datetime.fromtimestamp(file_stat.st_mtime).strftime('%Y-%m-%d %H:%M:%S')
             }
             files.append(info)
     return render_template("file_list.html", files=files)
