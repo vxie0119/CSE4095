@@ -31,6 +31,6 @@ jobs:
           # Usually set to "ec2-user"
           REMOTE_USER: ${{ secrets.USERNAME }}
           # Limit the deploy to ONLY these files
-          SOURCE: "hw03/*.html hw03/*.py" 
+          SOURCE: "hw03/fileuploading/templates/*.html hw03/fileuploading/*.py" 
           # Local EC2 path to deploy the code. e.g. "~/server"
           TARGET: ${{ secrets.TARGET_DIR }}
