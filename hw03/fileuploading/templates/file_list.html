@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Uploaded Files</title>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <th>File Name</th>
+                <th>Size</th>
+                <th>Modified Date</th>
+            </tr>
+            {% for file in files %}
+            <tr>
+                <td><a href="/file/{{ file.filename }}">{{ file.filename }}</a></td>
+                <td>{{ file.size }}</td>
+                <td>{{ file.modified_date</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
