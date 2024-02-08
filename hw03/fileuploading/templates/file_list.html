@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width" initial-scale="1.0">
         <title>Uploaded Files</title>
     </head>
     <body>
+        <h1>Uploaded Images</h1>
         <table>
             <tr>
                 <th>File Name</th>
@@ -12,9 +15,9 @@
             </tr>
             {% for file in files %}
             <tr>
-                <td><a href="/file/{{ file.filename }}">{{ file.filename }}</a></td>
+                <td>{{ file.filename }}</td>
                 <td>{{ file.size }}</td>
-                <td>{{ file.modified_date</td>
+                <td>{{ file.modified_date }}</td>
             </tr>
             {% endfor %}
         </table>
