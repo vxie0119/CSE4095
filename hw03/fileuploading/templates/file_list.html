@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width" initial-scale="1.0">
+        <title>Uploaded Files</title>
+    </head>
+    <body>
+        <h1>Uploaded Images</h1>
+        <table>
+            <tr>
+                <th>File Name</th>
+                <th>Size (megabytes)</th>
+                <th>Modified Date (Year/MM/DD)</th>
+            </tr>
+            {% for file in files %}
+            <tr>
+                <td>{{ file.filename }}</td>
+                <td>{{ file.size }}</td>
+                <td>{{ file.modified_date }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
