@@ -20,6 +20,9 @@
                 <td>{{ file.modified_date }}</td>
             </tr>
             {% endfor %}
+            {% if non_image %}
+            <p>Selected file is not an image file.</p>
+            {% endif %}
         </table>
     </body>
 </html>
