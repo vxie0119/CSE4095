@@ -26,7 +26,7 @@ def test_success_route_post_method(client):
     }
     response = client.post('/success', data=data, content_type='multipart/form-data')
     assert response.status_code == 200
-    assert 'Acknowledgement.html' in response.data.decode()
+    assert 'File uploaded successfully' in response.data.decode()
 
 def test_file_list_route(client):
     response = client.get('/file_list')
