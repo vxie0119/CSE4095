@@ -29,6 +29,6 @@ jobs:
           pip install pytest
       - name: Install requests
         run: |
-          pip install request
+          pip install requests
       - name: Run tests
         run: pytest hw03/fileuploading/test_main.py
