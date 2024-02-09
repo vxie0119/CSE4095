@@ -37,14 +37,14 @@ def test_file_list_route(client):
 def test_file_upload_and_listing(client):
     # Upload a file
     data = {
-        'file': (BytesIO(b'test file content'), 'test_upload.txt')
+        'file': (BytesIO(b'test file content'), 'test_upload.jpg')
     }
     client.post('/success', data=data, content_type='multipart/form-data')
 
     # Check if the file appears in the file list
     response = client.get('/file_list')
     assert response.status_code == 200
-    assert 'test_upload.txt' in response.data.decode()
+    assert 'test_upload.jpg' in response.data.decode()
 
 def test_non_image_file_filter(client):
     # Assuming your application should only list image files
