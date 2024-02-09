@@ -1,5 +1,6 @@
 import pytest
 import os
+from io import BytesIO
 from main import app as flask_app
 
 @pytest.fixture
