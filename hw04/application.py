@@ -39,4 +39,10 @@ def upload(local, bucket, s3_client):
             full_path = os.path.join(subdir, file)
             with open(full_path, 'rb') as data:
                 s3_client.upload_fileobj(data, bucket, full_path[len(local):])
+                
+def list_contents(bucket, s3_client):
+    contents = []
+    for item in s3_client.list_objects_v2(Bucket=bucket)['Contents']:
+        contents.append(item['Key'])
+    return contents
 
