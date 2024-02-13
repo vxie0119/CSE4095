@@ -45,4 +45,8 @@ def list_contents(bucket, s3_client):
     for item in s3_client.list_objects_v2(Bucket=bucket)['Contents']:
         contents.append(item['Key'])
     return contents
+ 
+def get_file(bucket, file, s3_client):
+    with open(file, 'wb') as data:
+        s3_client.download_fileobj(bucket, file, data)
 
