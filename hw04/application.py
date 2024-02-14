@@ -76,20 +76,20 @@ def get_file(s3, bucket, file, file_path):
     except ClientError as e:
         print(f"An error occurred: {e}")
 def list_buckets(s3):
+    """Listing all buckets"""
     try:
         response = s3.list_buckets()
         print("Bucket List: ")
         bucket_names = [bucket['Name'] for bucket in response.get('Buckets', [])]
         for name in bucket_names:
             print(name)
-        return bucket_names  
+        return bucket_names
     except NoCredentialsError:
         print("Credentials not available.")
-        return []  
+        return []
     except ClientError as e:
         print(f"An error occurred: {e}")
-        return [] 
-
+        return []
 
 if __name__ == "__main__":
     main_menu()

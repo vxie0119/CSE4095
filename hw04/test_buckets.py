@@ -7,7 +7,7 @@ from moto import mock_aws
 from application import list_buckets, upload, list_contents, get_file
 
 class TestS3Client(unittest.TestCase):
-
+    """Testing S3 Client"""
     @mock_aws
     def test_list_buckets_empty(self):
         """Testing if the list of buckets is empty"""
@@ -49,7 +49,7 @@ class TestS3Client(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp_dir:
             file_path = os.path.join(tmp_dir, 'test_file.txt')
-            with open(file_path, 'w') as f:
+            with open(file_path, 'w', encoding='utf-8') as f:
                 f.write('Test Content')
 
             upload(s3, tmp_dir, 'test-bucket')
@@ -86,7 +86,7 @@ class TestS3Client(unittest.TestCase):
             file_path = os.path.join(tmp_dir, 'test_file.txt')
             get_file(s3, 'test-bucket', 'test_file.txt', file_path)
 
-            with open(file_path, 'r') as f:
+            with open(file_path, 'r', encoding='utf-8') as f:
                 content = f.read()
             self.assertEqual(content, 'Test Content')
 
