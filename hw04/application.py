@@ -35,16 +35,24 @@ def main_menu():
             break
         else:
             print('Invalid choice.')
-            
+         
 def upload(local, bucket):
     s3_client = boto3.client('s3')
     for subdir, dirs, files in os.walk(local):
         for file in files:
             full_path = os.path.join(subdir, file)
             key = os.path.relpath(full_path, local)
-            with open(full_path, 'rb') as data:
-                s3_client.upload_fileobj(data, bucket, key)
-                
+            try:
+                with open(full_path, 'rb') as data:
+                    s3_client.upload_fileobj(data, bucket, key)
+                print(f"Uploaded {full_path} to {bucket}/{key}")
+            except FileNotFoundError:
+                print(f"File not found: {full_path}")
+            except ClientError as e:
+                print(f"An error occurred uploading {full_path}: {e}")
+            except Exception as e:
+                print(f"Unexpected error: {e}")
+     
 def list_contents(bucket):
     s3_client = boto3.client('s3')
     response = s3_client.list_objects_v2(Bucket=bucket)
