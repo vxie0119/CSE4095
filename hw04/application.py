@@ -1,5 +1,6 @@
 import boto3
 import os
+from botocore.exceptions import NoCredentialsError, ClientError
 
 def main_menu():
     s3 = boto3.client('s3')
@@ -13,8 +14,7 @@ def main_menu():
         choice = input("Enter your choice:")
 
         if choice == '1':
-            for bucket in s3.list_buckets()['Buckets']:
-                print(bucket['Name'])
+            list_buckets()
         elif choice == '2':
             local = input('Enter the path to the local folder: ')
             bucket = input('Enter the bucket name: ')
@@ -49,6 +49,18 @@ def list_contents(bucket, s3_client):
 def get_file(bucket, file, s3_client):
     with open(file, 'wb') as data:
         s3_client.download_fileobj(bucket, file, data)
+
+def list_buckets():
+    try:
+        s3 = boto3.client('s3'):
+        response = s3.list_buckets()
+        print("Bucket List: ")
+        for bucket in response['Buckets']:
+            print(bucket['Name'])
+    except NoCredentialsError:
+        print("Credentials not available.")
+    except ClientError as e:
+        print(f"An error occured: {e}")
 
 if __name__ == "__main__":
     main_menu()
