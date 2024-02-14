@@ -1,6 +1,7 @@
-import boto3
 import os
+import boto3
 from botocore.exceptions import NoCredentialsError, ClientError
+
 
 def main_menu():
     s3 = boto3.client('s3')
@@ -35,14 +36,13 @@ def main_menu():
             break
         else:
             print('Invalid choice.')
-         
 def upload(s3, local_path, bucket):
     local_path = os.path.expanduser(local_path)  # Expand the ~ symbol
 
     # Check if the path is a directory
     if os.path.isdir(local_path):
         # If it's a directory, upload each file
-        for subdir, dirs, files in os.walk(local_path):
+        for subdir, _, files in os.walk(local_path):
             for file in files:
                 full_path = os.path.join(subdir, file)
                 key = os.path.relpath(full_path, local_path)
@@ -61,26 +61,18 @@ def upload(s3, local_path, bucket):
             print(f"An error occurred: {e}")
     else:
         print(f"The provided path does not exist: {local_path}")
-
-    
-    
 def list_contents(s3, bucket):
     response = s3.list_objects_v2(Bucket=bucket)
     if 'Contents' in response:
         return [item['Key'] for item in response['Contents']]
-    else:
-        return []
- 
+    return []
 def get_file(s3, bucket, file):
     try:
-        download_path = os.path.join(os.getcwd(), file)
         with open(file, 'wb') as data:
             s3.download_fileobj(bucket, file, data)
         print(f"File '{file}' downloaded successfully.")
     except ClientError as e:
         print(f"An error occurred: {e}")
-
-
 def list_buckets(s3):
     try:
         response = s3.list_buckets()
