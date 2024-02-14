@@ -4,7 +4,7 @@ import os
 import tempfile
 import boto3
 from moto import mock_aws
-from application import *
+from application import upload, list_contents, get_file, list_buckets, generate_presigned_url, list_object_versions, delete_object
 
 class TestS3Client(unittest.TestCase):
     """Testing S3 Client"""
