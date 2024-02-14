@@ -83,6 +83,7 @@ def list_buckets(s3):
         print("Bucket List: ")
         for bucket in response['Buckets']:
             print(bucket['Name'])
+        return response
     except NoCredentialsError:
         print("Credentials not available.")
     except ClientError as e:
