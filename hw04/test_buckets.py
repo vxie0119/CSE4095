@@ -83,10 +83,14 @@ class TestS3Client(unittest.TestCase):
         s3.put_object(Bucket='test-bucket', Key='test_file.txt', Body='Test Content')
 
         with tempfile.TemporaryDirectory() as tmp_dir:
-            file_path = os.path.join(tmp_dir, 'test_file.txt')
-            get_file(s3, 'test-bucket', 'test_file.txt', file_path)
+            # Change the current working directory to the temporary directory
+            os.chdir(tmp_dir)
 
-            with open(file_path, 'r', encoding='utf-8') as f:
+            # Call get_file, which now saves the file in the current working directory
+            get_file(s3, 'test-bucket', 'test_file.txt')
+
+            # Check if the file was downloaded correctly
+            with open('test_file.txt', 'r', encoding='utf-8') as f:
                 content = f.read()
             self.assertEqual(content, 'Test Content')
 
