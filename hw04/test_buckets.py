@@ -1,41 +1,39 @@
 import unittest
-import boto3
-import application  
-from moto.s3 import mock_s3  # moto library is used to mock S3
+from unittest.mock import patch
+import application
 
 class TestS3BucketOperations(unittest.TestCase):
 
-    @mock_s3
-    def setUp(self):
-        self.s3 = boto3.client('s3', region_name='us-east-1')
-        self.s3.create_bucket(Bucket='test-bucket')
+    @patch('application.boto3.client')
+    def test_list_buckets(self, mock_boto3_client):
+        mock_boto3_client.return_value.list_buckets.return_value = {
+            'Buckets': [{'Name': 'test-bucket'}]
+        }
+        application.list_buckets(mock_boto3_client)
+        mock_boto3_client.return_value.list_buckets.assert_called_once()
 
-    def test_list_buckets(self):
-        # Test list_buckets function
-        with mock_s3():
-            buckets = application.list_buckets(self.s3)
-            self.assertIn('test-bucket', [b['Name'] for b in buckets['Buckets']])
+    @patch('application.boto3.client')
+    def test_upload(self, mock_boto3_client):
+        with patch('application.os.path.isdir') as mock_isdir, \
+             patch('application.os.walk') as mock_os_walk:
+            mock_isdir.return_value = True
+            mock_os_walk.return_value = [('/path/to/dir', ('dir1',), ('file1',))]
+            application.upload(mock_boto3_client, '/path/to/dir', 'test-bucket')
+            mock_boto3_client.return_value.upload_file.assert_called_with('/path/to/dir/file1', 'test-bucket', 'file1')
 
-    @mock_s3
-    def test_upload_file(self):
-        # Test upload function with a mock file
-        application.upload(self.s3, 'test.txt', 'test-bucket')
-        response = self.s3.list_objects_v2(Bucket='test-bucket')
-        self.assertIn('test.txt', [obj['Key'] for obj in response.get('Contents', [])])
+    @patch('application.boto3.client')
+    def test_list_contents(self, mock_boto3_client):
+        mock_boto3_client.return_value.list_objects_v2.return_value = {
+            'Contents': [{'Key': 'file1'}, {'Key': 'file2'}]
+        }
+        result = application.list_contents(mock_boto3_client, 'test-bucket')
+        self.assertEqual(result, ['file1', 'file2'])
 
-    @mock_s3
-    def test_list_contents(self):
-        # Test list_contents function
-        self.s3.put_object(Bucket='test-bucket', Key='test.txt', Body='test data')
-        contents = application.list_contents(self.s3, 'test-bucket')
-        self.assertIn('test.txt', contents)
-
-    @mock_s3
-    def test_get_file(self):
-        # Test get_file function
-        self.s3.put_object(Bucket='test-bucket', Key='test.txt', Body='test data')
-        application.get_file(self.s3, 'test-bucket', 'test.txt')
-
+    @patch('application.boto3.client')
+    def test_get_file(self, mock_boto3_client):
+        with patch('builtins.open', unittest.mock.mock_open()) as mock_file:
+            application.get_file(mock_boto3_client, 'test-bucket', 'file1')
+            mock_boto3_client.return_value.download_fileobj.assert_called_with('test-bucket', 'file1', mock_file())
 
 if __name__ == '__main__':
     unittest.main()
