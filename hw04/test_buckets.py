@@ -4,7 +4,7 @@ import os
 import tempfile
 import boto3
 from moto import mock_aws
-from application import list_buckets, upload, list_contents, get_file
+from application import list_buckets, upload, list_contents, get_file, generate_presigned_url, list_object_versions, delete_object
 
 class TestS3Client(unittest.TestCase):
     """Testing S3 Client"""
@@ -94,6 +94,35 @@ class TestS3Client(unittest.TestCase):
                 content = f.read()
             self.assertEqual(content, 'Test Content')
 
+    @mock_aws
+    def test_generate_presigned_url(self):
+        s3 = boto3.client('s3', region_name='us-east-1')
+        s3.create_bucket(Bucket='test-bucket')
+        s3.put_object(Bucket='test-bucket', Key='test-file.txt', Body='Test content')
+
+        url = generate_presigned_url(s3, 'test-bucket', 'test-file.txt')
+        self.assertIn('test-bucket', url)
+        self.assertIn('test-file.txt', url)
+
+    @mock_aws
+    def test_list_object_versions(self):
+        s3 = boto3.client('s3', region_name='us-east-1')
+        s3.create_bucket(Bucket='test-bucket')
+        s3.put_object(Bucket='test-bucket', Key='test-file.txt', Body='Test content')
+
+        versions = list_object_versions(s3, 'test-bucket', 'test-file.txt')
+        self.assertEqual(len(versions), 1)
+        self.assertEqual(versions[0]['Key'], 'test-file.txt')
+
+    @mock_aws
+    def test_delete_object(self):
+        s3 = boto3.client('s3', region_name='us-east-1')
+        s3.create_bucket(Bucket='test-bucket')
+        s3.put_object(Bucket='test-bucket', Key='test-file.txt', Body='Test content')
+
+        delete_object(s3, 'test-bucket', 'test-file.txt')
+        response = s3.list_objects(Bucket='test-bucket')
+        self.assertNotIn('Contents', response)
 
 if __name__ == '__main__':
     unittest.main()
