@@ -1,48 +1,95 @@
 """Importing Modules"""
 import unittest
-from unittest.mock import patch
-import application
+import os
+import tempfile
+import boto3
+from moto import mock_aws
+from application import list_buckets, upload, list_contents, get_file
 
-class TestS3BucketOperations(unittest.TestCase):
-    """Testing s3 operations"""
-    @patch('application.boto3.client')
-    def test_list_buckets(self, mock_boto3_client):
-        """Test the list_buckets function."""
-        mock_boto3_client.return_value.list_buckets.return_value = {
-            'Buckets': [{'Name': 'test-bucket'}]
-        }
-        result = application.list_buckets(mock_boto3_client.return_value)
-        mock_boto3_client.return_value.list_buckets.assert_called_once()
-        self.assertIn('test-bucket', [b['Name'] for b in result['Buckets']])
+class TestS3Client(unittest.TestCase):
 
+    @mock_aws
+    def test_list_buckets_empty(self):
+        """Testing if the list of buckets is empty"""
+        s3 = boto3.client('s3', region_name='us-east-1')
+        buckets = list_buckets(s3)
+        self.assertEqual(buckets, [])
 
-    @patch('application.boto3.client')
-    def test_upload(self, mock_boto3_client):
-        """Testing upload"""
-        with patch('application.os.path.isdir') as mock_isdir, \
-             patch('application.os.walk') as mock_os_walk:
-            mock_isdir.return_value = True
-            mock_os_walk.return_value = [('/path/to/dir', ('dir1',), ('file1',))]
-            application.upload(mock_boto3_client, '/path/to/dir', 'test-bucket')
-            mock_boto3_client.return_value.upload_file.assert_called_with
-            ('/path/to/dir/file1', 'test-bucket', 'file1')
+    @mock_aws
+    def test_list_buckets_with_buckets(self):
+        """Testing list_buckets function"""
+        s3 = boto3.client('s3', region_name='us-east-1')
+        s3.create_bucket(Bucket='test-bucket')
+        buckets = list_buckets(s3)
+        self.assertEqual(buckets, ['test-bucket'])
 
-    @patch('application.boto3.client')
-    def test_list_contents(self, mock_boto3_client):
-        """Testing to make sure it lists all the contents"""
-        mock_boto3_client.return_value.list_objects_v2.return_value = {
-            'Contents': [{'Key': 'file1'}, {'Key': 'file2'}]
-        }
-        result = application.list_contents(mock_boto3_client.return_value, 'test-bucket')
-        self.assertEqual(result, ['file1', 'file2'])
+    @mock_aws
+    def test_upload_file(self):
+        """Testing upload function"""
+        s3 = boto3.client('s3', region_name='us-east-1')
+        s3.create_bucket(Bucket='test-bucket')
 
-    @patch('application.boto3.client')
-    def test_get_file(self, mock_boto3_client):
-        """Test downloading"""
-        with patch('builtins.open', unittest.mock.mock_open()) as mock_file:
-            application.get_file(mock_boto3_client, 'test-bucket', 'file1')
-            mock_boto3_client.return_value.download_fileobj.assert_called_with
-            ('test-bucket', 'file1', mock_file())
+        with tempfile.NamedTemporaryFile(delete=False) as tmp:
+            tmp.write(b'Hello World')
+            tmp_path = tmp.name
+
+        upload(s3, tmp_path, 'test-bucket')
+
+        result = s3.list_objects(Bucket='test-bucket')['Contents']
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]['Key'], os.path.basename(tmp_path))
+
+        os.remove(tmp_path)
+
+    @mock_aws
+    def test_upload_directory(self):
+        """Testing upload directory"""
+        s3 = boto3.client('s3', region_name='us-east-1')
+        s3.create_bucket(Bucket='test-bucket')
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            file_path = os.path.join(tmp_dir, 'test_file.txt')
+            with open(file_path, 'w') as f:
+                f.write('Test Content')
+
+            upload(s3, tmp_dir, 'test-bucket')
+
+            result = s3.list_objects(Bucket='test-bucket')['Contents']
+            self.assertEqual(len(result), 1)
+            self.assertIn('test_file.txt', result[0]['Key'])
+
+    @mock_aws
+    def test_list_contents_empty_bucket(self):
+        """Testing to see if contents is empty"""
+        s3 = boto3.client('s3', region_name='us-east-1')
+        s3.create_bucket(Bucket='test-bucket')
+        contents = list_contents(s3, 'test-bucket')
+        self.assertEqual(contents, [])
+
+    @mock_aws
+    def test_list_contents_with_objects(self):
+        """Testing list_contents function"""
+        s3 = boto3.client('s3', region_name='us-east-1')
+        s3.create_bucket(Bucket='test-bucket')
+        s3.put_object(Bucket='test-bucket', Key='test_file.txt', Body='Test Content')
+        contents = list_contents(s3, 'test-bucket')
+        self.assertEqual(contents, ['test_file.txt'])
+
+    @mock_aws
+    def test_get_file(self):
+        """Testing get_file function"""
+        s3 = boto3.client('s3', region_name='us-east-1')
+        s3.create_bucket(Bucket='test-bucket')
+        s3.put_object(Bucket='test-bucket', Key='test_file.txt', Body='Test Content')
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            file_path = os.path.join(tmp_dir, 'test_file.txt')
+            get_file(s3, 'test-bucket', 'test_file.txt', file_path)
+
+            with open(file_path, 'r') as f:
+                content = f.read()
+            self.assertEqual(content, 'Test Content')
+
 
 if __name__ == '__main__':
     unittest.main()

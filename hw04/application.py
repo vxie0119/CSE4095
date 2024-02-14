@@ -68,29 +68,28 @@ def list_contents(s3, bucket):
     if 'Contents' in response:
         return [item['Key'] for item in response['Contents']]
     return []
-def get_file(s3, bucket, file):
+def get_file(s3, bucket, file, file_path):
     """Download a file from a bucket"""
     try:
-        with open(file, 'wb') as data:
-            s3.download_fileobj(bucket, file, data)
+        s3.download_file(bucket, file, file_path)
         print(f"File '{file}' downloaded successfully.")
     except ClientError as e:
         print(f"An error occurred: {e}")
 def list_buckets(s3):
-    """List all buckets"""
     try:
         response = s3.list_buckets()
         print("Bucket List: ")
-        if 'Buckets' in response:
-            for bucket in response['Buckets']:
-                print(bucket['Name'])
-            return response
-        print("No buckets found.")
-        return {'Buckets': []}
+        bucket_names = [bucket['Name'] for bucket in response.get('Buckets', [])]
+        for name in bucket_names:
+            print(name)
+        return bucket_names  
     except NoCredentialsError:
         print("Credentials not available.")
+        return []  
     except ClientError as e:
-        print(f"An error occured: {e}")
+        print(f"An error occurred: {e}")
+        return [] 
+
 
 if __name__ == "__main__":
     main_menu()
