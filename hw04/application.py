@@ -21,9 +21,12 @@ def main_menu():
             upload(local, bucket, s3)
         elif choice == '3':
             bucket = input('Enter the bucket name: ')
-            contents = list_contents(bucket, s3)
-            for item in contents:
-                print(item)
+            try:
+                contents = list_contents(bucket, s3)
+                for item in contents:
+                    print(item)
+            except ClientError as e:
+                print(f"An error occured: {e}")
         elif choice == '4':
             bucket = input('Enter the bucket name: ')
             file = input('Enter the file name: ')
@@ -33,20 +36,26 @@ def main_menu():
         else:
             print('Invalid choice.')
             
-def upload(local, bucket, s3_client):
+def upload(local, bucket):
+    s3_client = boto3.client('s3')
     for subdir, dirs, files in os.walk(local):
         for file in files:
             full_path = os.path.join(subdir, file)
+            key = os.path.relpath(full_path, local)
             with open(full_path, 'rb') as data:
-                s3_client.upload_fileobj(data, bucket, full_path[len(local):])
+                s3_client.upload_fileobj(data, bucket, key)
                 
-def list_contents(bucket, s3_client):
-    contents = []
-    for item in s3_client.list_objects_v2(Bucket=bucket)['Contents']:
-        contents.append(item['Key'])
-    return contents
+def list_contents(bucket):
+    s3_client = boto3.client('s3')
+    response = s3_client.list_objects_v2(Bucket=bucket)
+    if 'Contents' in response:
+        return [item['Key'] for item in response['Contents']]
+    else:
+        return []
  
-def get_file(bucket, file, s3_client):
+def get_file(bucket, file):
+    s3_client = boto3.client('s3')
+    download_path = os.path.join(os.getcwd(), file_name)
     with open(file, 'wb') as data:
         s3_client.download_fileobj(bucket, file, data)
 
