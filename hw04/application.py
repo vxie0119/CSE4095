@@ -1,8 +1,7 @@
+"""Importing Modules"""
 import os
 import boto3
 from botocore.exceptions import NoCredentialsError, ClientError
-"""Importing Modules"""
-
 def main_menu():
     """Main Menu function"""
     s3 = boto3.client('s3')
