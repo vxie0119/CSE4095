@@ -52,7 +52,7 @@ def get_file(bucket, file, s3_client):
 
 def list_buckets():
     try:
-        s3 = boto3.client('s3'):
+        s3 = boto3.client('s3')
         response = s3.list_buckets()
         print("Bucket List: ")
         for bucket in response['Buckets']:
