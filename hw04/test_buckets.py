@@ -63,7 +63,7 @@ class TestS3Client(unittest.TestCase):
         """Testing to see if contents is empty"""
         s3 = boto3.client('s3', region_name='us-east-1')
         s3.create_bucket(Bucket='test-bucket')
-        contents = list_contents(s3, 'test-bucket')
+        contents = list_contents(s3, 'test-bucket', '')
         self.assertEqual(contents, [])
 
     @mock_aws
@@ -72,7 +72,7 @@ class TestS3Client(unittest.TestCase):
         s3 = boto3.client('s3', region_name='us-east-1')
         s3.create_bucket(Bucket='test-bucket')
         s3.put_object(Bucket='test-bucket', Key='test_file.txt', Body='Test Content')
-        contents = list_contents(s3, 'test-bucket')
+        contents = list_contents(s3, 'test-bucket', '')
         self.assertEqual(contents, ['test_file.txt'])
 
     @mock_aws
@@ -87,7 +87,7 @@ class TestS3Client(unittest.TestCase):
             os.chdir(tmp_dir)
 
             # Call get_file, which now saves the file in the current working directory
-            get_file(s3, 'test-bucket', 'test_file.txt')
+            get_file(s3, 'test-bucket', 'test_file.txt', '')
 
             # Check if the file was downloaded correctly
             with open('test_file.txt', 'r', encoding='utf-8') as f:

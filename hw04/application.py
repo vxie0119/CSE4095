@@ -62,17 +62,18 @@ def upload(s3, local_path, bucket):
             print(f"An error occurred: {e}")
     else:
         print(f"The provided path does not exist: {local_path}")
-def list_contents(s3, bucket):
-    """Lists the contents in a bucket"""
-    response = s3.list_objects_v2(Bucket=bucket)
+def list_contents(s3, bucket, folder_name):
+    """Lists the contents in a specific folder within a bucket."""
+    response = s3.list_objects_v2(Bucket=bucket, Prefix=folder_name)
     if 'Contents' in response:
-        return [item['Key'] for item in response['Contents']]
+        return [item['Key'] for item in response['Contents'] if item['Key'].startswith(folder_name)]
     return []
-def get_file(s3, bucket, file):
-    """Download a file from a bucket"""
+def get_file(s3, bucket, file, folder_name):
+    """Download a file from a specific folder within a bucket."""
     try:
+        file_key = os.path.join(folder_name, file) if folder_name else file
         local_path = os.path.join(os.getcwd(), file)
-        s3.download_file(bucket, file, local_path)
+        s3.download_file(bucket, file_key, local_path)
         print(f"File '{file}' downloaded successfully.")
     except ClientError as e:
         print(f"An error occurred: {e}")
