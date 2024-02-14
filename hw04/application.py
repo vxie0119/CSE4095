@@ -68,10 +68,11 @@ def list_contents(s3, bucket):
     if 'Contents' in response:
         return [item['Key'] for item in response['Contents']]
     return []
-def get_file(s3, bucket, file, file_path):
+def get_file(s3, bucket, file):
     """Download a file from a bucket"""
     try:
-        s3.download_file(bucket, file, file_path)
+        local_path = os.path.join(os.getcwd(), file)
+        s3.download_file(bucket, file, local_path)
         print(f"File '{file}' downloaded successfully.")
     except ClientError as e:
         print(f"An error occurred: {e}")
