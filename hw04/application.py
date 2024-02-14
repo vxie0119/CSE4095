@@ -55,7 +55,6 @@ def main_menu():
             break
         else:
             print('Invalid choice.')
-            
 def upload(s3, local_path, bucket):
     """Upload function"""
     local_path = os.path.expanduser(local_path)  # Expand the ~ symbol

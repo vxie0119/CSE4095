@@ -4,7 +4,7 @@ import os
 import tempfile
 import boto3
 from moto import mock_aws
-from application import list_buckets, upload, list_contents, get_file, generate_presigned_url, list_object_versions, delete_object
+from application import *
 
 class TestS3Client(unittest.TestCase):
     """Testing S3 Client"""
@@ -96,6 +96,7 @@ class TestS3Client(unittest.TestCase):
 
     @mock_aws
     def test_generate_presigned_url(self):
+        """Testing presigned URL"""
         s3 = boto3.client('s3', region_name='us-east-1')
         s3.create_bucket(Bucket='test-bucket')
         s3.put_object(Bucket='test-bucket', Key='test-file.txt', Body='Test content')
@@ -106,6 +107,7 @@ class TestS3Client(unittest.TestCase):
 
     @mock_aws
     def test_list_object_versions(self):
+        """Testing object versions"""
         s3 = boto3.client('s3', region_name='us-east-1')
         s3.create_bucket(Bucket='test-bucket')
         s3.put_object(Bucket='test-bucket', Key='test-file.txt', Body='Test content')
@@ -116,6 +118,7 @@ class TestS3Client(unittest.TestCase):
 
     @mock_aws
     def test_delete_object(self):
+        """Testing deletion of object"""
         s3 = boto3.client('s3', region_name='us-east-1')
         s3.create_bucket(Bucket='test-bucket')
         s3.put_object(Bucket='test-bucket', Key='test-file.txt', Body='Test content')
