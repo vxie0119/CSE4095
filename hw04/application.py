@@ -11,7 +11,10 @@ def main_menu():
         print("2. Backup files to a bucket")
         print("3. List all objects in bucket")
         print("4. Download object from selected bucket")
-        print("5. Exit")
+        print("5. Generate a pre-signed URL for an object")
+        print("6. List all version information for an object")
+        print("7. Delete an object from a bucket")
+        print("8. Exit")
         choice = input("Enter your choice:")
 
         if choice == '1':
@@ -33,9 +36,26 @@ def main_menu():
             file = input('Enter the file name: ')
             get_file(s3, bucket, file, '')
         elif choice == '5':
+            bucket = input('Enter the bucket name: ')
+            file = input('Enter the file name: ')
+            url = generate_presigned_url(s3, bucket, file)
+            if url:
+                print("Pre-signed URL: ", url)
+        elif choice == '6':
+            bucket = input('Enter the bucket name: ')
+            file = input('Enter the file name: ')
+            versions = list_object_versions(s3, bucket, file)
+            for version in versions:
+                print(version)
+        elif choice == '7':
+            bucket = input('Enter the bucket name: ')
+            file = input('Enter the file name: ')
+            delete_object(s3, bucket, file)
+        elif choice == '8':
             break
         else:
             print('Invalid choice.')
+            
 def upload(s3, local_path, bucket):
     """Upload function"""
     local_path = os.path.expanduser(local_path)  # Expand the ~ symbol
@@ -92,6 +112,35 @@ def list_buckets(s3):
     except ClientError as e:
         print(f"An error occurred: {e}")
         return []
+
+def generate_presigned_url(s3, bucket_name, object_name, expiration=604800):
+    """Generate a pre-signed URL to share an S3 object"""
+    try:
+        response = s3.generate_presigned_url('get_object',
+                                             Params={'Bucket': bucket_name, 'Key': object_name},
+                                             ExpiresIn=expiration)
+    except ClientError as e:
+        print(f"Error generating pre-signed URL: {e}")
+        return None
+
+    return response
+
+def list_object_versions(s3, bucket_name, object_name):
+    """List all versions of an object in an S3 bucket"""
+    try:
+        versions = s3.list_object_versions(Bucket=bucket_name, Prefix=object_name)
+        return versions.get('Versions', [])
+    except ClientError as e:
+        print(f"Error retrieving object versions: {e}")
+        return []
+
+def delete_object(s3, bucket_name, object_name):
+    """Delete an object from an S3 bucket"""
+    try:
+        s3.delete_object(Bucket=bucket_name, Key=object_name)
+        print(f"Object '{object_name}' deleted successfully from bucket '{bucket_name}'.")
+    except ClientError as e:
+        print(f"Error deleting object: {e}")
 
 if __name__ == "__main__":
     main_menu()
