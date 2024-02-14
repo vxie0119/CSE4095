@@ -23,7 +23,7 @@ def main_menu():
         elif choice == '3':
             bucket = input('Enter the bucket name: ')
             try:
-                contents = list_contents(s3, bucket)
+                contents = list_contents(s3, bucket, '')
                 for item in contents:
                     print(item)
             except ClientError as e:
@@ -31,7 +31,7 @@ def main_menu():
         elif choice == '4':
             bucket = input('Enter the bucket name: ')
             file = input('Enter the file name: ')
-            get_file(s3, bucket, file)
+            get_file(s3, bucket, file, '')
         elif choice == '5':
             break
         else:
