@@ -7,8 +7,9 @@ class TestS3BucketOperations(unittest.TestCase):
     """Testing s3 operations"""
     @patch('application.boto3.client')
     def test_list_buckets(self, mock_boto3_client):
+        """Test the list_buckets function."""
         mock_boto3_client.return_value.list_buckets.return_value = {
-        '   Buckets': [{'Name': 'test-bucket'}]
+            'Buckets': [{'Name': 'test-bucket'}]
         }
         result = application.list_buckets(mock_boto3_client.return_value)
         mock_boto3_client.return_value.list_buckets.assert_called_once()
@@ -28,6 +29,7 @@ class TestS3BucketOperations(unittest.TestCase):
 
     @patch('application.boto3.client')
     def test_list_contents(self, mock_boto3_client):
+        """Testing to make sure it lists all the contents"""
         mock_boto3_client.return_value.list_objects_v2.return_value = {
             'Contents': [{'Key': 'file1'}, {'Key': 'file2'}]
         }
