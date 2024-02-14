@@ -85,9 +85,8 @@ def list_buckets(s3):
             for bucket in response['Buckets']:
                 print(bucket['Name'])
             return response
-        else:
-            print("No buckets found.")
-            return {'Buckets': []}
+        print("No buckets found.")
+        return {'Buckets': []}
     except NoCredentialsError:
         print("Credentials not available.")
     except ClientError as e:
