@@ -3,7 +3,6 @@ import os
 import boto3
 from botocore.exceptions import NoCredentialsError, ClientError
 def main_menu():
-    """Main Menu function"""
     s3 = boto3.client('s3')
     while True:
         print("\nMain Menu:")
@@ -58,7 +57,6 @@ def main_menu():
 def upload(s3, local_path, bucket):
     """Upload function"""
     local_path = os.path.expanduser(local_path)  # Expand the ~ symbol
-
     # Check if the path is a directory
     if os.path.isdir(local_path):
         # If it's a directory, upload each file
@@ -121,9 +119,7 @@ def generate_presigned_url(s3, bucket_name, object_name, expiration=604800):
     except ClientError as e:
         print(f"Error generating pre-signed URL: {e}")
         return None
-
     return response
-
 def list_object_versions(s3, bucket_name, object_name):
     """List all versions of an object in an S3 bucket"""
     try:
@@ -132,7 +128,6 @@ def list_object_versions(s3, bucket_name, object_name):
     except ClientError as e:
         print(f"Error retrieving object versions: {e}")
         return []
-
 def delete_object(s3, bucket_name, object_name):
     """Delete an object from an S3 bucket"""
     try:
