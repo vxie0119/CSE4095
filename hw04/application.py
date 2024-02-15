@@ -4,6 +4,7 @@ import boto3
 from botocore.exceptions import NoCredentialsError, ClientError
 
 def main_menu():
+    """Main menu function"""
     s3 = boto3.client('s3')
     menu_options = {
         '1': ("List all buckets", lambda: list_buckets(s3)),
