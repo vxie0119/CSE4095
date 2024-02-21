@@ -35,3 +35,7 @@ jobs:
       # TODO: Change the --function-name value to match your function name in AWS
       - name: Deploy python code to lambda
         run: aws lambda update-function-code --function-name=hw05-lambda --zip-file=fileb://hw05-code.zip
+        
+      - name: Run all your pytest tests in your code
+        run: |
+          pytest hw05/test_func.py
