@@ -18,7 +18,7 @@ def get_item_from_dynamodb(file_name, arn):
     ("testfile2.txt", "Another test file content.")
 ])
 def test_upload_trigger_lambda(file_name, content):
-    bucket_name = 'your-s3-bucket'  # Replace with your S3 bucket name
+    bucket_name = 'hw05-s3'  # Replace with your S3 bucket name
     arn = f'arn:aws:s3:::{bucket_name}/{file_name}'
 
     # Upload to S3
