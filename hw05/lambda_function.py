@@ -9,7 +9,7 @@ dynamodb = boto3.resource('dynamodb')
 # Specify your DynamoDB table name
 table = dynamodb.Table('hw05-db')  # Replace with your actual table name
 
-def lambda_handler(event, context)
+def lambda_handler(event, context):
     for record in event['Records']:
         bucket_name = record['s3']['bucket']['name']
         object_key = record['s3']['object']['key']
