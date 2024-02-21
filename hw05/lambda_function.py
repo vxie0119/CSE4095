@@ -10,53 +10,52 @@ dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('hw05-db')  # Replace with your actual table name
 
 def lambda_handler(event, context):
-    # Loop through each record in the event
     for record in event['Records']:
-        # Get the bucket name and object key from the event
         bucket_name = record['s3']['bucket']['name']
         object_key = record['s3']['object']['key']
         file_size = record['s3']['object'].get('size', 0)
         eTag = record['s3']['object'].get('eTag')
-        
-        # Get the S3 object ARN
         bucket_arn = f"arn:aws:s3:::{bucket_name}/{object_key}"
-        
-        # Get the current time as the upload date
         upload_date = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-        
-        # Attempt to insert the file metadata in the DynamoDB table
+
+        # Define the key for the DynamoDB get_item request
+        # Include both the partition key (file_name) and the sort key (ARN)
+        dynamo_key = {
+            'file_name': object_key,
+            'ARN': bucket_arn
+        }
+
         try:
-            # Check if the item exists
-            response = table.get_item(Key={'file_name': object_key})
+            # Attempt to get the existing item from DynamoDB table
+            response = table.get_item(Key=dynamo_key)
             if 'Item' in response:
-                # Item exists, update it
+                # If the item exists, update it
                 table.update_item(
-                    Key={'file_name': object_key},
-                    UpdateExpression="set file_size = :fs, upload_date = :ud, ARN = :arn, eTag = :et",
+                    Key=dynamo_key,
+                    UpdateExpression="set file_size = :fs, upload_date = :ud, eTag = :et",
                     ExpressionAttributeValues={
                         ':fs': str(file_size),
                         ':ud': upload_date,
-                        ':arn': bucket_arn,
                         ':et': eTag
                     }
                 )
-                print(f"Updated existing item: {object_key}")
+                print(f"Updated existing item: {object_key} with ARN {bucket_arn}.")
             else:
-                # Item does not exist, insert it
+                # If the item does not exist, insert it
                 table.put_item(
                     Item={
                         'file_name': object_key,
-                        'file_size': str(file_size),
+                        'ARN': bucket_arn,  # The sort key
                         'upload_date': upload_date,
-                        'ARN': bucket_arn,
+                        'file_size': str(file_size),
                         'eTag': eTag
                     }
                 )
-                print(f"Inserted new item: {object_key}")
+                print(f"Inserted new item: {object_key} with ARN {bucket_arn}.")
         except ClientError as e:
             print(f"Error: {e.response['Error']['Message']}")
             raise e
-    
+
     return {
         'statusCode': 200,
         'body': json.dumps('Successfully processed S3 event.')
