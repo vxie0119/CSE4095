@@ -32,7 +32,7 @@ def test_upload_trigger_lambda(file_name, content):
     assert item is not None
     assert item['file_name'] == file_name
     assert item['ARN'] == arn
-    assert 'file_size' == str(len(content))
+    assert 'file_size' == int(len(content))
     assert 'upload_date' in item
     assert 'eTag' in item
 
