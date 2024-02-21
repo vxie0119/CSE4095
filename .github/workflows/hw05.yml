@@ -1,0 +1,49 @@
+# This yaml only pushes the code to the existing lambda. You must create
+#  the lambda function(s) in the AWS Console first, before triggering the pipeline. 
+# Source:  https://www.whitespectre.com/ideas/multiple-aws-lambda-deployment-with-github-actions/
+on:
+  push:
+    branches:
+      - hw05-main
+jobs:
+  deploy1:
+    name: Deploy lambda code for S3 trigger
+    # Your repo MUST be in a UConn GitHub Organization that has been configured with RH Runners. 
+    # This is a manual task that needs to be completed by the UConn School of Business IT staff.
+    # The runs-on value must be "self-hosted" to leverage the runner .
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout the files
+        uses: actions/checkout@v2
+          
+      # Setp AWS CLI
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
+      # The first parameter can be whatever you want to name your zip file. Really does not matter.
+      #   just make sure you use the same file name in the next step below.
+      # The second parameter should be the file path of your local lambda code you want to deploy
+      - name: Zip python code
+        run: zip -j hw05-code.zip ./hw05/lambda_function.py
+
+      # TODO: Change the --function-name value to match your function name in AWS
+      - name: Deploy python code to lambda
+        run: aws lambda update-function-code --function-name=hw05-lambda --zip-file=fileb://hw05-code.zip
+        
+        # Extra Credit Function
+      - name: Zip python code
+        run: zip -j hw05-code.zip ./hw05/ec_function.py
+
+      # TODO: Change the --function-name value to match your function name in AWS
+      - name: Deploy python code to lambda
+        run: aws lambda update-function-code --function-name=hw05-ec --zip-file=fileb://hw05-code.zip
+        
+      - name: Run all your pytest tests in your code
+        run: |
+          pytest hw05/test_func.py
