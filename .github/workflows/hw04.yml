@@ -4,7 +4,6 @@ on:
     branches:
       # TODO: Set this to "main" or "master" or whatever your main branch is called
       - hw04-main
-      - main
 
 jobs:
   test:
