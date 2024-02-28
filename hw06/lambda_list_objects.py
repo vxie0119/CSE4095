@@ -4,7 +4,7 @@ import boto3
 def lambda_handler(event, context):
     # TODO implement
     s3 = boto3.client('s3')
-    bucket = event['pathParameters']['bucket-name']
+    bucket = event['bucket']['bucket-name']
 
     # List objects within the bucket
     objects = s3.list_objects_v2(Bucket=bucket)
