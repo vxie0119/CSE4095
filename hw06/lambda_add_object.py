@@ -1,20 +1,35 @@
-import json
+import logging
+import base64
 import boto3
-from urllib.parse import unquote_plus
+import os
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+s3_client = boto3.client('s3')
+
+response  = {
+    'statusCode': 200,
+    'headers': {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+    },
+    'body': ''
+}
 
 def lambda_handler(event, context):
-    # TODO implement
-    s3 = boto3.client('s3')
-    bucket = event['pathParameters']['bucket-name']
-    body = json.loads(event['body'])
 
-    object_name = unquote_plus(body['name'])
-    object_content = body['content']
+    file_name = event['headers']['file-name']
+    file_content = base64.b64decode(event['body'])
+    
+    BUCKET_NAME = os.environ['BUCKET_NAME']
 
-    # Add the object to the bucket
-    s3.put_object(Bucket=bucket, Key=object_name, Body=object_content)
+    try:
+        s3_response = s3_client.put_object(Bucket=BUCKET_NAME, Key=file_name, Body=file_content)   
+        logger.info('S3 Response: {}'.format(s3_response))
+        response['body'] = 'Your file has been uploaded'
 
-    return {
-        'statusCode': 200,
-        'body': json.dumps({'message': f'{object_name} added to {bucket}'})
-    }
+        return response
+
+    except Exception as e:
+        raise IOError(e)
