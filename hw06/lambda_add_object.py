@@ -10,10 +10,8 @@ s3_client = boto3.client('s3')
 
 def lambda_handler(event, context):
     try:
-        # Parse body content from event
-        body = json.loads(event['body-json'])
-        file_name = body['file_name']
-        file_content = base64.b64decode(body['file_content'])
+        file_name = event['params']['querystring']['file_name']
+        file_content = base64.b64decode(event['body-json'])
 
         # Extract bucket name
         bucket_name = event['params']['path']['bucket-name']
@@ -21,7 +19,7 @@ def lambda_handler(event, context):
         # Upload file
         s3_response = s3_client.put_object(Bucket=bucket_name, Key=file_name, Body=file_content)   
         logger.info('S3 Response: {}'.format(s3_response))
-        response_body = 'Your file has been uploaded'
+        response_body = 'Your file has been uploaded to {}.'.format(bucket_name)
 
 
     except Exception as e:
