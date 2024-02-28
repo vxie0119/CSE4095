@@ -1,44 +1,18 @@
-import logging
+import json
 import base64
 import boto3
-import json
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+def lambda_hander(event, context):
+    s3 = boto3.client('s3')
 
-s3_client = boto3.client('s3')
+    get_file = event['content']
+    decode_content = base64.b64decode(get_file)
+    bucket = event['bucket']['bucket-name']
+    object = event['pathParameters']['object-name']
 
-def lambda_handler(event, context):
-    try:
-        file_name = event['params']['querystring']['file_name']
-        file_content = base64.b64decode(event['body-json'])
+    s3_upload = s3.put_object(Bucket=bucket, Key=object, Body=decode_content)
 
-        # Extract bucket name
-        bucket_name = event['params']['path']['bucket-name']
-
-        # Upload file
-        s3_response = s3_client.put_object(Bucket=bucket_name, Key=file_name, Body=file_content)   
-        logger.info('S3 Response: {}'.format(s3_response))
-        response_body = 'Your file has been uploaded to {}.'.format(bucket_name)
-
-
-    except Exception as e:
-        logger.error("Error uploading file: {}".format(e))
-        response_body = 'Error in file upload: {}'.format(e)
-        return {
-            'statusCode': 500,
-            'headers': {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Credentials': 'true'
-            },
-            'body': json.dumps({'message': response_body})
-        }
-    
     return {
         'statusCode': 200,
-        'headers': {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': 'true'
-        },
-        'body': json.dumps({'message': response_body})
+        'body': json.dumps('Object is uploaded successfully.')
     }
