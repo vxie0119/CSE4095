@@ -7,7 +7,7 @@ from http_utils import *
 API_URL = "https://qppgh6p2uk.execute-api.us-east-1.amazonaws.com/prod"
 BUCKET = "hw06.s3"
 FILE_NAME = "giants.png"
-FILE_PATH = "/Downloads/giants.png"  
+FILE_PATH = "./hw06/giants.png"  
 
 # Replace these with the actual endpoints or the mock endpoints if you are mocking
 LIST_BUCKET_URL = f"{API_URL}/list"
