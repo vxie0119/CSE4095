@@ -3,6 +3,7 @@ import boto3
 
 def lambda_handler(event, context):
     # TODO implement
+    print(event)
     s3 = boto3.client('s3')
     buckets = s3.list_buckets()
 
