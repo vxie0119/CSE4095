@@ -2,17 +2,20 @@ import json
 import base64
 import boto3
 
-def lambda_hander(event, context):
+def lambda_handler(event, context):
+    print(event)
+    bucket_name = event['body-json']['bucket']
+    file_name = event['body-json']['file_name']
+    
+    print("bucket", bucket_name, "file", file_name)
+    file_content = base64.b64decode(event['body-json']['body'])
+    
     s3 = boto3.client('s3')
-
-    get_file = event['content']
-    decode_content = base64.b64decode(get_file)
-    bucket = event['bucket']['bucket-name']
-    object = event['pathParameters']['object-name']
-
-    s3_upload = s3.put_object(Bucket=bucket, Key=object, Body=decode_content)
-
+    
+    # Puts objects into bucket
+    s3_response = s3.put_object(Bucket=bucket_name, Key=file_name, Body=file_content)
+    print('S3 Response: {}'.format(s3_response))
     return {
         'statusCode': 200,
-        'body': json.dumps('Object is uploaded successfully.')
+        'body': json.dumps(s3_response)
     }
