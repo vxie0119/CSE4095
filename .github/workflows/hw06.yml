@@ -56,8 +56,8 @@ jobs:
       
       # Requirements txt
       - run: |
-          python3 -m pip3 install --upgrade pip3
-          pip3 install pytest
+          python -m pip install --upgrade pip
+          pip install pytest
           if [ -f hw06/requirements.txt ]; then pip install -r hw06/requirements.txt; fi
         
       - name: Run all your pytest tests in your code
