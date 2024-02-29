@@ -3,7 +3,6 @@ on:
   push:
     branches:
       # Set this to "main" or "master" or whatever your main branch is called
-      - main
       - hw03-main
 
 jobs:
