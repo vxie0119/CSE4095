@@ -41,8 +41,7 @@ def lambda_handler(event=None, context=None):
 
         print('Uploading')
         target_bucket = 'hw09-thumbnails-vx' 
-        thumbnail_key = f'thumbnails/{key}'
-        s3_res.upload_fileobj(buffer, target_bucket, thumbnail_key)
+        s3_res.meta.client.upload_fileobj(Fileobj=buffer, Bucket=target_bucket, Key=key)
         print('Successful upload')
 
     print(f'Operation Completed for: {key}')
