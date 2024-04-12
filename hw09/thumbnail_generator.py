@@ -4,13 +4,13 @@ from boto3.s3.transfer import TransferConfig
 from io import BytesIO
 import json
 
-s3_res = boto3.resource('s3')
+s3 = boto3.client('s3')
 CONFIG = TransferConfig(multipart_threshold=1024 * 10,
                         multipart_chunksize=1024 * 10,
                         use_threads=True)
 
 def lambda_handler(event=None, context=None):
-    #print(f'Received event: {json.dumps(event)}')
+    print(f'Received event: {event}')
     #print(event)
     #if 'Records' not in event:
         #print('Error: No Records key in event object. Event does not contain expected structure.')
@@ -26,8 +26,8 @@ def lambda_handler(event=None, context=None):
     print(f'Origin Bucket: {bucket_name}')
     print(f'File Key: {key}. Processing.')
 
-    original_image_response = s3_res.Object(Bucket=bucket_name, Key=key)
-    original_image = original_image_response.get()['Body'].read()
+    original_image_response = s3.get_object(Bucket=bucket_name, Key=key)
+    original_image = original_image_response['Body'].read()
             
     with Image.open(BytesIO(original_image)) as img:
         print(f'Before image size: {img}')
@@ -41,7 +41,7 @@ def lambda_handler(event=None, context=None):
 
         print('Uploading')
         target_bucket = 'hw09-thumbnails-vx' 
-        s3_res.meta.client.upload_fileobj(Fileobj=buffer, Bucket=target_bucket, Key=key)
+        s3.upload_fileobj(Fileobj=buffer, Bucket=target_bucket, Key=key, Config=CONFIG)
         print('Successful upload')
 
     print(f'Operation Completed for: {key}')
