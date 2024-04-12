@@ -9,7 +9,7 @@ CONFIG = TransferConfig(multipart_threshold=1024 * 10,
                         multipart_chunksize=1024 * 10,
                         use_threads=True)
 
-def lambda_handler(event, context):
+def lambda_handler(event=None, context=None):
     #print(f'Received event: {json.dumps(event)}')
     #print(event)
     #if 'Records' not in event:
@@ -29,23 +29,19 @@ def lambda_handler(event, context):
     response = s3_res.meta.client.get_object(Bucket=bucket_name, Key=key)['Body'].read()
             
     with Image.open(BytesIO(response)) as img:
-        print(f'Before image size: {img.size}')
+        print(f'Before image size: {img}')
         img.thumbnail((300, 300))
-        print(f'After image size: {img.size}')
+        print(f'After image size: {img}')
 
+        print('Thumbnail Generated')
         buffer = BytesIO()
         img.save(buffer, format='PNG')
         buffer.seek(0)
 
         print('Uploading')
-        s3_res.meta.client.upload_fileobj(Fileobj=buffer, Bucket='hw09-thumbnails-vx' , Key=key, Config=CONFIG)
+        response = s3_res.meta.client.upload_fileobj(Fileobj=buffer, Bucket='hw09-thumbnails-vx' , Key=key, Config=CONFIG)
         print('Successful upload')
         print(response)
 
     print(f'Operation Completed for: {key}')
-
-    return {
-        'statusCode': 200,
-        'body': json.dumps('Operation completed')
-    }
 
