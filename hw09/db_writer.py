@@ -1,5 +1,5 @@
 import boto3
-import os
+import json
 from datetime import datetime
 
 dynamodb = boto3.resource('dynamodb')
@@ -7,20 +7,29 @@ table = dynamodb.Table('hw09-image-metadata')
 
 def lambda_handler(event, context):
     for record in event['Records']:
-        bucket = record['s3']['bucket']['name']
-        key = record['s3']['object']['key']
-        size = record['s3']['object']['size']
-        # You would get the last modified date from the event or the S3 object metadata
-        last_modified = datetime.now().isoformat()  
-        write_to_db(bucket, key, size, last_modified)
+        try:
+            sns = json.loads(record['body'])
+            s3_message = json.loads(sns['Message'])
 
-def write_to_db(bucket, key, size, last_modified):
-    response = table.put_item(
-        Item={
-            'Bucket': bucket,
-            'Key': key,
-            'Size': size,
-            'LastModified': last_modified
-        }
-    )
-    print(response)  # This will log to AWS CloudWatch
+            s3_record = s3_message['Records'][0]
+            file_name = s3_record['s3']['object']['key']
+            size = s3_record['s3']['object']['size']
+            event_time = s3_record['eventTime']
+            date = datetime.strptime(event_time, "%Y-%m-%dT%H:%M:%S.%fZ").strftime("%Y-%m-%d")
+
+            item = {
+                'FileName': file_name,
+                'Date': date,
+                'Size': size
+            }
+
+            response = table.put_item(Item=item)
+            print(f"Item written to DynamoDB: {item}")
+
+        except Exception as e:
+            print(f"Error processing record: {record}, error: {str(e)}")
+
+    return {
+        'statusCode': 200,
+        'body': json.dumps('S3 event processed and data is uploaded to DynamoDB.')
+    }
