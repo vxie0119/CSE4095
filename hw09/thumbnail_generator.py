@@ -10,11 +10,11 @@ CONFIG = TransferConfig(multipart_threshold=1024 * 10,
                         use_threads=True)
 
 def lambda_handler(event, context):
-    print(f'Received event: {json.dumps(event)}')
-    print(event)
-    if 'Records' not in event:
-        print('Error: No Records key in event object. Event does not contain expected structure.')
-        return {'statusCode': 400, 'body': json.dumps('Error: No Records key in event.')}
+    #print(f'Received event: {json.dumps(event)}')
+    #print(event)
+    #if 'Records' not in event:
+        #print('Error: No Records key in event object. Event does not contain expected structure.')
+        #return {'statusCode': 400, 'body': json.dumps('Error: No Records key in event.')}
 
     body_json = json.loads(event['Records'][0]['body'])
     message_json = json.loads(body_json['Message'])
