@@ -30,9 +30,9 @@ def lambda_handler(event=None, context=None):
     original_image = original_image_response['Body'].read()
             
     with Image.open(BytesIO(original_image)) as img:
-        print(f'Before image size: {img}')
+        print(f'Before image size: {img.size}')
         img.thumbnail((300, 300))
-        print(f'After image size: {img}')
+        print(f'After image size: {img.size}')
 
         print('Thumbnail Generated')
         buffer = BytesIO()
