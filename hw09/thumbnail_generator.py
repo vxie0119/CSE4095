@@ -26,9 +26,9 @@ def lambda_handler(event, context):
     print(f'Origin Bucket: {bucket_name}')
     print(f'File Key: {key}. Processing.')
 
-    original_image = s3_res.Object(bucket_name, key).get()['Body'].read()
+    response = s3_res.meta.client.get_object(Bucket=bkt, Key=Key)['Body'].read()
             
-    with Image.open(BytesIO(original_image)) as img:
+    with Image.open(BytesIO(response)) as img:
         print(f'Before image size: {img.size}')
         img.thumbnail((300, 300))
         print(f'After image size: {img.size}')
@@ -38,9 +38,9 @@ def lambda_handler(event, context):
         buffer.seek(0)
 
         print('Uploading')
-        target_bucket = 'hw09-thumbnails-vx' 
-        s3_res.meta.client.upload_fileobj(Fileobj=buffer, Bucket=target_bucket, Key=key, Config=CONFIG)
+        s3_res.meta.client.upload_fileobj(Fileobj=buffer, Bucket='hw09-thumbnails-vx' , Key=key, Config=CONFIG)
         print('Successful upload')
+        print(response)
 
     print(f'Operation Completed for: {key}')
 
