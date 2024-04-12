@@ -1,6 +1,6 @@
 import boto3
 import os
-from PIL import Image
+from Pillow import Image
 import io
 
 s3_client = boto3.client('s3')
@@ -11,7 +11,7 @@ def lambda_handler(event, context):
         key = record['s3']['object']['key']
         image = get_image(bucket, key)
         thumbnail = create_thumbnail(image)
-        s3_save(bucket, key, thumbnail)
+        s3_save(key, thumbnail)
 
 def get_image(bucket, key):
     response = s3_client.get_object(Bucket=bucket, Key=key)
@@ -27,6 +27,7 @@ def create_thumbnail(image):
     buffer.seek(0)
     return buffer
 
-def s3_save(bucket, key, thumbnail):
+def s3_save(key, thumbnail):
+    thumbnail_bucket = 'hw09-thumbnails-vx'
     thumbnail_key = 'thumbnails/' + os.path.basename(key)
-    s3_client.put_object(Bucket=bucket, Key=thumbnail_key, Body=thumbnail)
+    s3_client.put_object(Bucket=thumbnail_bucket, Key=thumbnail_key, Body=thumbnail)
