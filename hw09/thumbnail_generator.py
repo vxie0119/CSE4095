@@ -26,7 +26,7 @@ def lambda_handler(event, context):
     print(f'Origin Bucket: {bucket_name}')
     print(f'File Key: {key}. Processing.')
 
-    response = s3_res.meta.client.get_object(Bucket=bkt, Key=Key)['Body'].read()
+    response = s3_res.meta.client.get_object(Bucket=bucket_name, Key=key)['Body'].read()
             
     with Image.open(BytesIO(response)) as img:
         print(f'Before image size: {img.size}')
