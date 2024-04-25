@@ -65,6 +65,34 @@ Resources:
             Method: post
             RestApiId: !Ref ServerlessRestApi
 
+  # Task 3: S3 Bucket Resource Definition
+  MyPrivateS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      WebsiteConfiguration:
+        IndexDocument: index.html
+
+  # Task 3: Cloudfront Distribution Resource Definition
+  MyCloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !GetAtt MyPrivateS3Bucket.DomainName
+            Id: S3Origin
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${AWS::StackName}
+        Enabled: 'true'
+        DefaultRootObject: index.html
+        DefaultCacheBehavior:
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          ForwardedValues:
+            QueryString: false
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: 'true'
+
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:
@@ -95,8 +123,17 @@ Outputs:
 
   # Task 2: For DB and API
   PlayerDataApi:
-    Description: "API Gateway endpoint URL for POST method"
+    Description: API Gateway endpoint URL for POST method
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/playerdata/"
   PlayersTableArn:
     Description: "DynamoDB table ARN"
     Value: !GetAtt PlayersTable.Arn
+
+  # Task 3: S3 and Cloudfront Output
+  S3BucketWebsiteURL:
+    Description: URL for website hosted on S3
+    Value: !GetAtt MyPrivateS3Bucket.WebsiteURL
+
+  CloudFrontDistributionDomainName:
+    Description: CloudFront distribution domain name
+    Value: !GetAtt MyCloudFrontDistribution.DomainName
