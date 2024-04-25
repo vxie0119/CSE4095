@@ -69,6 +69,7 @@ Resources:
   MyPrivateS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
+    BucketName: hw11-bucket
       AccessControl: Private
       WebsiteConfiguration:
         IndexDocument: index.html
