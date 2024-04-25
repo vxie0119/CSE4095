@@ -30,6 +30,21 @@ Resources:
           Properties:
             Path: /hello
             Method: get
+  
+  # Task 2: Dynamo DB table
+  PlayersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Players
+      AttributeDefinitions:
+        - AttributeName: name
+          AttributeType: S
+      KeySchema:
+        - AttributeName: name
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+    
+  # Task 2: Lambda function that writes to table
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
@@ -44,6 +59,7 @@ Resources:
       #ResourceGroupName:
         #Ref: ApplicationResourceGroup
       #AutoConfigurationEnabled: 'true'
+
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
