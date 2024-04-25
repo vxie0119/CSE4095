@@ -23,11 +23,11 @@ Resources:
       Runtime: python3.9
       Architectures:
       - x86_64
+      Role: arn:aws:iam::851725362931:role/LabRole
       Events:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Role: arn:aws:iam::851725362931:role/LabRole
             Path: /hello
             Method: get
 
@@ -35,10 +35,10 @@ Resources:
     Type: AWS::ResourceGroups::Group
     Properties:
       Name:
-        Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
-      ResourceQuery:
+      Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
+        ResourceQuery:
         Type: CLOUDFORMATION_STACK_1_0
-  ApplicationInsightsMonitoring:
+  #ApplicationInsightsMonitoring:
     #Type: AWS::ApplicationInsights::Application
     #Properties:
       #ResourceGroupName:
