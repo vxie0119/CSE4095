@@ -69,10 +69,14 @@ Resources:
   MyPrivateS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-    BucketName: hw11-bucket
-      AccessControl: Private
-      WebsiteConfiguration:
-        IndexDocument: index.html
+      BucketName: hw11-bucket
+
+  # Task 3: OAI 
+  MyOAI:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: OAI for MyPrivateS3Bucket
 
   # Task 3: Cloudfront Distribution Resource Definition
   MyCloudFrontDistribution:
@@ -83,7 +87,7 @@ Resources:
           - DomainName: !GetAtt MyPrivateS3Bucket.DomainName
             Id: S3Origin
             S3OriginConfig:
-              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${AWS::StackName}
+              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${MyOAI}
         Enabled: 'true'
         DefaultRootObject: index.html
         DefaultCacheBehavior:
