@@ -45,6 +45,25 @@ Resources:
       BillingMode: PAY_PER_REQUEST
     
   # Task 2: Lambda function that writes to table
+  PlayerDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: player_data/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Role: arn:aws:iam::851725362931:role/LabRole
+      Environment: 
+        Variables:
+          TABLE_NAME: Players
+      Events:
+        PostPlayerData:
+          Type: Api
+          Properties:
+            Path: /playerdata
+            Method: post
+            RestApiId: !Ref ServerlessRestApi
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
@@ -73,3 +92,11 @@ Outputs:
   #HelloWorldFunctionIamRole:
     #Description: Implicit IAM Role created for Hello World function
     #Value: !GetAtt HelloWorldFunctionRole.Arn
+
+  # Task 2: For DB and API
+  PlayerDataApi:
+    Description: "API Gateway endpoint URL for POST method"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/playerdata/"
+  PlayersTableArn:
+    Description: "DynamoDB table ARN"
+    Value: !GetAtt PlayersTable.Arn
