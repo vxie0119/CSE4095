@@ -14,6 +14,7 @@ Globals:
     # You can add LoggingConfig parameters such as the Logformat, Log Group, and SystemLogLevel or ApplicationLogLevel. Learn more here https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-loggingconfig.
     LoggingConfig:
       LogFormat: JSON
+
 Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -64,39 +65,60 @@ Resources:
             Path: /playerdata
             Method: post
             RestApiId: !Ref ServerlessRestApi
-
-  # Task 3: S3 Bucket Resource Definition
-  MyPrivateS3Bucket:
+  # Task 3: S3 bucket
+  MyWebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: hw11-bucket
-
-  # Task 3: OAI 
-  MyOAI:
+      BucketName: hw11-bucket2
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
+      WebsiteConfiguration:
+        IndexDocument: index.html
+  # Task 3: OAI
+  MyOriginAccessIdentity:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
       CloudFrontOriginAccessIdentityConfig:
-        Comment: OAI for MyPrivateS3Bucket
-
-  # Task 3: Cloudfront Distribution Resource Definition
+        Comment: 'Origin access identity for bucket'
+  # Task 3: Cloud Front
   MyCloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
-        Origins:
-          - DomainName: !GetAtt MyPrivateS3Bucket.DomainName
-            Id: S3Origin
-            S3OriginConfig:
-              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${MyOAI}
-        Enabled: 'true'
+        Enabled: true
+        Comment: 'CloudFront Distribution for my website'
         DefaultRootObject: index.html
+        Origins:
+          - Id: S3-WebsiteOrigin
+            DomainName: !GetAtt MyWebsiteBucket.RegionalDomainName
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${MyOriginAccessIdentity}
         DefaultCacheBehavior:
-          TargetOriginId: S3Origin
+          TargetOriginId: S3-WebsiteOrigin
           ViewerProtocolPolicy: redirect-to-https
           ForwardedValues:
             QueryString: false
+          Compress: true
         ViewerCertificate:
-          CloudFrontDefaultCertificate: 'true'
+          CloudFrontDefaultCertificate: true
+        PriceClass: PriceClass_100
+  # Task 3: Bucket policy
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref MyWebsiteBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowCloudFrontAccess
+            Effect: Allow
+            Principal:
+              AWS: !Sub arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${MyOriginAccessIdentity}
+            Action: s3:GetObject
+            Resource: !Sub 'arn:aws:s3:::${MyWebsiteBucket}/*'
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
@@ -137,7 +159,7 @@ Outputs:
   # Task 3: S3 and Cloudfront Output
   S3BucketWebsiteURL:
     Description: URL for website hosted on S3
-    Value: !GetAtt MyPrivateS3Bucket.WebsiteURL
+    Value: !GetAtt MyWebsiteBucket.WebsiteURL
 
   CloudFrontDistributionDomainName:
     Description: CloudFront distribution domain name
