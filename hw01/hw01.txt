@@ -1,0 +1,293 @@
+1.  Output
+
+Command-Line Calculator
+
+Choose an operation:
+1. Addition (+)
+2. Subtraction (-)
+3. Multiplication (*)
+4. Division (/)
+5. Exit
+Enter your choice (1-5): 1
+Enter operand 1: 1
+Enter operand 2: 1
+The answer of 1.0 + 1.0 is 2.0
+
+Choose an operation:
+1. Addition (+)
+2. Subtraction (-)
+3. Multiplication (*)
+4. Division (/)
+5. Exit
+Enter your choice (1-5): 2
+Enter operand 1: 2
+Enter operand 2: 2
+The answer of 2.0 - 2.0 is 0.0
+
+Choose an operation:
+1. Addition (+)
+2. Subtraction (-)
+3. Multiplication (*)
+4. Division (/)
+5. Exit
+Enter your choice (1-5): 3
+Enter operand 1: 3
+Enter operand 2: 3
+The answer of 3.0 * 3.0 is 9.0
+
+Choose an operation:
+1. Addition (+)
+2. Subtraction (-)
+3. Multiplication (*)
+4. Division (/)
+5. Exit
+Enter your choice (1-5): 4
+Enter operand 1: 4
+Enter operand 2: 2
+The answer of 4.0 / 2.0 is 2.0
+
+Choose an operation:
+1. Addition (+)
+2. Subtraction (-)
+3. Multiplication (*)
+4. Division (/)
+5. Exit
+Enter your choice (1-5): 5
+Closing application. Goodbye!
+
+2. Git Version
+git --version
+git version 2.42.0
+
+3. Python Version
+python --version
+Python 3.11.4
+
+4. File Properties
+ls -l ~/.ssh/id_ed25519
+-rw-------  1 vxie0119  staff  464 Sep 27 02:24 /Users/vxie0119/.ssh/id_ed25519
+
+5. Recursive File Structure
+ls -R
+README.md
+hw01
+hw01.txt
+
+./hw01:
+__pycache__
+hw01.zip
+hw01_tests.py
+pycalc.py
+
+./hw01/__pycache__:
+pycalc.cpython-311.pyc
+
+6. Git log main
+commit f9381e2c98e8b7d4bee1d53072be75ff4ffdd5d1
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 21:41:24 2024 -0500
+
+    fix
+
+commit 6498786ec9774eb5279e76ef11690ca1ab47b032
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 21:40:27 2024 -0500
+
+    Tracking hw01 files
+
+commit 9cc7ae2c67454e94d8e1fb6aa37f4877e782151b
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 23 21:51:04 2024 -0500
+
+    Update main.yml
+    
+    Fixed an error in yml
+
+commit 4048700b95b072b6b1b81b40ff61ccb904392393
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 23 21:47:56 2024 -0500
+
+    Update main.yml
+    
+    Removed pylint line
+
+commit 5ea61f99b52d9f82d34676256be6d850135de3b0
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 23 21:45:57 2024 -0500
+
+    Update main.yml
+    
+    Changed from ubuntu to self-hosted
+
+commit 6fa383f5ca814f0fde26506fb0889d02f8e01789
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 23 21:38:32 2024 -0500
+
+    Update main.yml
+    
+    Fixed file name in Run Tests
+
+commit 0764bd008a12561e5d30e898bbc0b38c9af5e312
+Merge: 360ea32 93f7d5c
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 23 21:36:20 2024 -0500
+
+    Merge pull request #5 from CSE4095-Spr24/hw01-main
+    
+    Renamed file
+
+commit 93f7d5c74bfcc921a537a1dfbad60eb96cdec2fb
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 21:32:10 2024 -0500
+
+    Renamed file
+
+commit 360ea32e2030b608968cfdd719508058373f8b53
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 23 21:28:45 2024 -0500
+
+    Update main.yml
+
+commit bb546a6ebe7ac52a14e031e263f92b2a90e76fd4
+Merge: b61e681 ab36664
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 23 21:03:50 2024 -0500
+
+    Merge pull request #4 from CSE4095-Spr24/hw01-main
+    
+    Updated calculator code and created some unit tests
+
+commit b61e681538a24b2120eb1db456c162975e606e8e
+Merge: 67f8155 494f407
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 23 20:56:22 2024 -0500
+
+    Merge pull request #3 from CSE4095-Spr24/workflow-update-1
+    
+    Create main.yml
+
+commit 494f407ee784e96fe28c6047820a227a4a6b44a6
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 23 20:56:10 2024 -0500
+
+    Create main.yml
+    
+    Changing workflow
+
+commit ab3666440b18245cd75ffbce4dd0945164d9e8d4
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 20:52:18 2024 -0500
+
+    Updated calculator code and created some unit tests
+
+commit 67f8155aeb8dc5a2142f884e8641906a43578ec4
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 23 00:46:34 2024 -0500
+
+    Delete .github/workflows directory
+
+commit 25ca6744c5544ae5a0eb7e781fedbb8fe53e5214
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 23 00:45:54 2024 -0500
+
+    Create main.yml
+
+commit e617110b370af55968c4e47644862be999a7af17
+Merge: 6dc8c09 409f238
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 23 00:31:14 2024 -0500
+
+    Merge pull request #1 from CSE4095-Spr24/hw01-main
+    
+    Python Calculator App
+
+commit 409f2387a661cfc82e41896c47b5f202892405d8
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 00:30:16 2024 -0500
+
+    Added code for the application portion of the calculator
+
+commit f48229f2b193d2b7f56dda4b0ad6f9a9f496552e
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 00:19:47 2024 -0500
+
+    Wrote code for common operators
+
+commit bb59e716799dce71b9d521fab566b0cee5b64cc3
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 00:14:29 2024 -0500
+
+    Testing the addition of a file and folder
+
+commit 6dc8c098df88608e9b75e575e45c9a6a559c2740
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 00:06:45 2024 -0500
+
+    Adding .DS_store
+
+commit 2a5abc731b6cfcf47aba7eb171cabb392677b399
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 00:00:19 2024 -0500
+
+    first commit
+
+7. Git log hw01-main
+
+commit 5c1398810870cd50709aac829542531403cc1211
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 22:01:17 2024 -0500
+
+    Added more unittests to test file
+
+commit a607640dd69b6b9716912fc9d5d064ab35c8c6cf
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 21:58:28 2024 -0500
+
+    Changed test file to purposely fail and test workflow
+
+commit 93f7d5c74bfcc921a537a1dfbad60eb96cdec2fb
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 21:32:10 2024 -0500
+
+    Renamed file
+
+commit ab3666440b18245cd75ffbce4dd0945164d9e8d4
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 20:52:18 2024 -0500
+
+    Updated calculator code and created some unit tests
+
+commit 409f2387a661cfc82e41896c47b5f202892405d8
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 00:30:16 2024 -0500
+
+    Added code for the application portion of the calculator
+
+commit f48229f2b193d2b7f56dda4b0ad6f9a9f496552e
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 00:19:47 2024 -0500
+
+    Wrote code for common operators
+
+commit bb59e716799dce71b9d521fab566b0cee5b64cc3
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 00:14:29 2024 -0500
+
+    Testing the addition of a file and folder
+
+commit 2a5abc731b6cfcf47aba7eb171cabb392677b399
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 23 00:00:19 2024 -0500
+
+    first commit
+
+8. Pull Requests
+git ls-remote origin 'pull/*/head'
+
+409f2387a661cfc82e41896c47b5f202892405d8	refs/pull/1/head
+0a25795279a1b1a70eb99f58217b7e2a15d84ae0	refs/pull/2/head
+494f407ee784e96fe28c6047820a227a4a6b44a6	refs/pull/3/head
+ab3666440b18245cd75ffbce4dd0945164d9e8d4	refs/pull/4/head
+93f7d5c74bfcc921a537a1dfbad60eb96cdec2fb	refs/pull/5/head
+a607640dd69b6b9716912fc9d5d064ab35c8c6cf	refs/pull/6/head
+5c1398810870cd50709aac829542531403cc1211	refs/pull/7/head

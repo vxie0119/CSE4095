@@ -1,0 +1,143 @@
+Pull Requests
+409f2387a661cfc82e41896c47b5f202892405d8	refs/pull/1/head
+9e7a23cad7c171ceb957a92207c60fba58fe2078	refs/pull/10/head
+9e7a23cad7c171ceb957a92207c60fba58fe2078	refs/pull/11/head
+0a25795279a1b1a70eb99f58217b7e2a15d84ae0	refs/pull/2/head
+494f407ee784e96fe28c6047820a227a4a6b44a6	refs/pull/3/head
+ab3666440b18245cd75ffbce4dd0945164d9e8d4	refs/pull/4/head
+93f7d5c74bfcc921a537a1dfbad60eb96cdec2fb	refs/pull/5/head
+a607640dd69b6b9716912fc9d5d064ab35c8c6cf	refs/pull/6/head
+5c1398810870cd50709aac829542531403cc1211	refs/pull/7/head
+2570e9f5a8fe5070c5e3ad11c32e96d67f64de9a	refs/pull/8/head
+703b449213c3d844c03d8edf3f1a522e80d2c8cb	refs/pull/9/head
+
+1. Git log hw02 -- 
+commit a23bdff6daebb3e8043607855568e4a94bf7945e
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 30 22:28:44 2024 -0500
+
+    Added another change to index.html to test GHA
+
+commit be966a1151093409cf8023d4e217a38082cdf073
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 30 22:25:09 2024 -0500
+
+    Update hw02.yml
+    
+    Changed line 33 from HW to hw
+
+commit 73c610b611381edcd5135a4451ccf61dd832fcc1
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 30 22:18:29 2024 -0500
+
+    Update hw02.yml
+    
+    Removed ```
+
+commit 9e7a23cad7c171ceb957a92207c60fba58fe2078
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 30 21:45:50 2024 -0500
+
+    Create hw02.yml
+    
+    Added hw02.yml into hw02 branch
+
+commit 703b449213c3d844c03d8edf3f1a522e80d2c8cb
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 30 21:22:10 2024 -0500
+
+    Added change to html file
+
+commit 2570e9f5a8fe5070c5e3ad11c32e96d67f64de9a
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 30 20:39:03 2024 -0500
+
+    Adding a simple python file for lambda to test CICD Pipeline and deploying code to AWS LL
+
+commit 9fa0942636b2695926d1cba403274fd746988c74
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 30 20:31:02 2024 -0500
+
+    Adding index.html to repo
+
+2. Git log maincommit 7ad11471c3cf437eeaeffc6fd00047d903c294b3
+Merge: 9802dd2 703b449
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 30 21:24:02 2024 -0500
+
+    Merge pull request #9 from CSE4095-Spr24/hw02
+    
+    Added change to html file
+
+commit 703b449213c3d844c03d8edf3f1a522e80d2c8cb
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 30 21:22:10 2024 -0500
+
+    Added change to html file
+
+commit 9802dd2a16a52117b408cef436174dafb968858a
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 30 21:20:55 2024 -0500
+
+    Update main.yml
+    
+    On-Push correction to hw01-main
+
+commit 367f93188318b8c38f7306b55deb57659a6cf4af
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 30 21:14:58 2024 -0500
+
+    Update hw02.yml
+    
+    Realized I just had to paste the template
+
+commit db97bbaa5b443f2db252b685e63540a58d6af6c9
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 30 21:09:09 2024 -0500
+
+    Update hw02.yml
+    
+    Possible syntax correction?
+
+commit 1101516548e9282f3fc2663e4f60e938478b9605
+Merge: aec4bdc 2570e9f
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 30 20:59:22 2024 -0500
+
+    Merge pull request #8 from CSE4095-Spr24/hw02
+    
+    Addition of HW02
+
+commit aec4bdc631247ed141190492da6471025125bb84
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 30 20:55:03 2024 -0500
+
+    Update hw02.yml
+    
+    Fixxed line 61 (wrong path)
+
+commit a35cf9e5015aa2bee10707c9edacc71a19f1af51
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 30 20:48:29 2024 -0500
+
+    Update hw02.yml
+    
+    Added REMOTE_HOST, REMOTE_USER, SOURCE, and TARGET
+
+commit 98c4f9f040d7f47d7f768f7f6d5dbad0ffaf45b8
+Author: Vincent Xie <vincent.xie@uconn.edu>
+Date:   Tue Jan 30 20:44:12 2024 -0500
+
+    Create hw02.yml
+
+commit 2570e9f5a8fe5070c5e3ad11c32e96d67f64de9a
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 30 20:39:03 2024 -0500
+
+    Adding a simple python file for lambda to test CICD Pipeline and deploying code to AWS LL
+
+commit 9fa0942636b2695926d1cba403274fd746988c74
+Author: Vincent Xie <vxie0119@Vincents-Air.lan>
+Date:   Tue Jan 30 20:31:02 2024 -0500
+
+    Adding index.html to repo
