@@ -1,0 +1,162 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'hw11-task1
+
+  Sample SAM Template for hw11-task1
+
+  '
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+    LoggingConfig:
+      LogFormat: JSON
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: HelloWorldFunction
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+      - x86_64
+      Role: arn:aws:iam::851725362931:role/LabRole
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
+    Metadata:
+      SamResourceId: HelloWorldFunction
+  PlayersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Players
+      AttributeDefinitions:
+      - AttributeName: name
+        AttributeType: S
+      KeySchema:
+      - AttributeName: name
+        KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+  PlayerDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: PlayerDataFunction
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+      - x86_64
+      Role: arn:aws:iam::851725362931:role/LabRole
+      Environment:
+        Variables:
+          TABLE_NAME: Players
+      Events:
+        PostPlayerData:
+          Type: Api
+          Properties:
+            Path: /playerdata
+            Method: post
+            RestApiId:
+              Ref: ServerlessRestApi
+    Metadata:
+      SamResourceId: PlayerDataFunction
+  MyWebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: hw11-bucket2
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
+      WebsiteConfiguration:
+        IndexDocument: index.html
+  MyOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: Origin access identity for bucket
+  MyCloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: CloudFront Distribution for my website
+        DefaultRootObject: index.html
+        Origins:
+        - Id: S3-WebsiteOrigin
+          DomainName:
+            Fn::GetAtt:
+            - MyWebsiteBucket
+            - RegionalDomainName
+          S3OriginConfig:
+            OriginAccessIdentity:
+              Fn::Sub: origin-access-identity/cloudfront/${MyOriginAccessIdentity}
+        DefaultCacheBehavior:
+          TargetOriginId: S3-WebsiteOrigin
+          ViewerProtocolPolicy: redirect-to-https
+          ForwardedValues:
+            QueryString: false
+          Compress: true
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+        PriceClass: PriceClass_100
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: MyWebsiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Sid: AllowCloudFrontAccess
+          Effect: Allow
+          Principal:
+            AWS:
+              Fn::Sub: arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity
+                ${MyOriginAccessIdentity}
+          Action: s3:GetObject
+          Resource:
+            Fn::Sub: arn:aws:s3:::${MyWebsiteBucket}/*
+  ApplicationResourceGroup:
+    Type: AWS::ResourceGroups::Group
+    Properties:
+      Name:
+        Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
+      ResourceQuery:
+        Type: CLOUDFORMATION_STACK_1_0
+Outputs:
+  HelloWorldApi:
+    Description: API Gateway endpoint URL for Prod stage for Hello World function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
+  HelloWorldFunction:
+    Description: Hello World Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - HelloWorldFunction
+      - Arn
+  PlayerDataApi:
+    Description: API Gateway endpoint URL for POST method
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/playerdata/
+  PlayersTableArn:
+    Description: DynamoDB table ARN
+    Value:
+      Fn::GetAtt:
+      - PlayersTable
+      - Arn
+  S3BucketWebsiteURL:
+    Description: URL for website hosted on S3
+    Value:
+      Fn::GetAtt:
+      - MyWebsiteBucket
+      - WebsiteURL
+  CloudFrontDistributionDomainName:
+    Description: CloudFront distribution domain name
+    Value:
+      Fn::GetAtt:
+      - MyCloudFrontDistribution
+      - DomainName
